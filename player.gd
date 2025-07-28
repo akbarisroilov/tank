@@ -20,30 +20,86 @@ var engine_hp_to_force_factor = 2.0
 #@onready var muzzle: Node3D = $Turret/Barrel/Muzzle
 #var bullet_scene: PackedScene = preload("res://Bullet.tscn")  # Path to bullet scene
 
-var current_steering: float = 0.0  # Current steering angle
-var fire_timer: float = 0.0        # Cooldown timer for shooting
+#var current_steering: float = 0.0  # Current steering angle
+#var fire_timer: float = 0.0        # Cooldown timer for shooting
+
+@onready var ray_start_position_local = Vector3(0, 0, 0) # Local to this RigidBody3D
+var ray_length = 1.0 # 1 unit downward
+var ray_color = Color.RED # Default to red
+
+var points: Array[Node3D]
+@onready var up_force = mass * 10 / 4
 
 func _ready() -> void:
-	# Ensure the turret and barrel are properly aligned initially
-	#turret.rotation = Vector3.ZERO
-	#barrel.rotation = Vector3.ZERO
-	pass
+	points.append($Node3D)
+	points.append($Node3D2)
+	points.append($Node3D3)
+	points.append($Node3D4)
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
-		# Apply impulse upward (Y-axis)
-		
-		apply_impulse(Vector3.UP * 3, Vector3(randf() * 2 - 1, randf() * 2 - 1, randf() * 2 - 1))
+		apply_upward_force(Vector3(randf() * 2 - 1, randf() * 2 - 1, randf() * 2 - 1), 100, 1)
 		
 	# Handle tank movement
 	var forward_input = Input.get_axis("down", "up")  # W/S for forward/backward
 	var steer_input = Input.get_axis("right", "left")  # A/D for steering
 	
 	#apply_force(-transform.basis.z.normalized() * forward_input * max_engine_force)
-	#
 	#apply_torque(Vector3.UP * steer_input * 6000000)
+	
+	DebugDraw3D.clear_all()
+	
+	#for point in points:
+		#DebugDraw3D.draw_sphere(point.position, 0.5, Color(255,0,0))
+	
+	# Get the object's local "down" direction in global space
+	# The 'basis' property of a Transform contains the orientation vectors.
+	# basis.y is the object's loray_start_position_localcal Y-axis. We want the negative Y (down).
+	var local_down_direction_global = -global_transform.basis.y.normalized()
+
+	for point in points:
+		# Calculate the ray's start point in GLOBAL space
+		var global_ray_start = global_transform * point.position
+
+		# Calculate the ray's end point in GLOBAL space,
+		# moving along the object's local "down" direction
+		var global_ray_end = global_ray_start + (local_down_direction_global * ray_length)
+
+		# Create a PhysicsRayQueryParameters3D object
+		var query = PhysicsRayQueryParameters3D.new()
+		query.from = global_ray_start
+		query.to = global_ray_end
+		query.exclude = [self.get_rid()] # Exclude self from collision
+
+		# Perform the raycast
+		var space_state = get_world_3d().direct_space_state
+		var result = space_state.intersect_ray(query)
+
+		if result:
+			# Ray hit something
+			ray_color = Color.GREEN
+			# Draw a sphere at the hit location using DebugDraw3D
+			DebugDraw3D.draw_sphere(result.position, 0.05, Color.BLUE, false) # position, radius, color, no_depth_test
+			# You can get the distance if needed
+			var distance = global_ray_start.distance_to(result.position)
+			print(distance)
+			DebugDraw3D.draw_text(point.global_position, "%.2f" % distance, 72)
+			apply_upward_force(point.position, 1-distance * up_force * 1.7, -1)
+			 #print("Ray hit at:", result.position, "Distance:", distance)
+		else:
+			# Ray didn't hit anything
+			ray_color = Color.RED
+
+		# Draw the ray line using DebugDraw3D (expects global coordinates)
+		DebugDraw3D.draw_line(global_ray_start, global_ray_end, ray_color, 2.0) # start_point, end_point, color, thickness, no_depth_test
 
 
+func apply_upward_force(position: Vector3, magnitude: float, direction: int):
+	var local_up_direction = transform.basis.y * direction
+	var force_vector = local_up_direction * magnitude
+	apply_force(force_vector, position)
+	
+	
 func _shoot() -> void:
 	pass
 	#var bullet = bullet_scene.instantiate()
