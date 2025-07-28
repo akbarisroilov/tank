@@ -1,0 +1,55 @@
+[gd_scene load_steps=12 format=3 uid="uid://cqelttabgx3mx"]
+
+[ext_resource type="PackedScene" uid="uid://boqkf0m4yxpg6" path="res://tanks/E75/E75.blend" id="1_mdihb"]
+[ext_resource type="Texture2D" uid="uid://dx5vpwlbukvbo" path="res://addons/kenney_prototype_textures/dark/texture_02.png" id="2_r4ysy"]
+[ext_resource type="Texture2D" uid="uid://en6cw2ufltef" path="res://addons/kenney_prototype_textures/orange/texture_03.png" id="3_fivor"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_up40y"]
+albedo_texture = ExtResource("2_r4ysy")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yx4wx"]
+albedo_texture = ExtResource("2_r4ysy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yo7gt"]
+albedo_texture = ExtResource("2_r4ysy")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_h54to"]
+albedo_texture = ExtResource("2_r4ysy")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q6jmm"]
+albedo_texture = ExtResource("2_r4ysy")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n8fru"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tlguq"]
+albedo_texture = ExtResource("3_fivor")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aii0d"]
+albedo_texture = ExtResource("3_fivor")
+
+[node name="E75" instance=ExtResource("1_mdihb")]
+
+[node name="set_0_group_0_002" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_up40y")
+
+[node name="set_0_group_0" parent="set_0_group_0_002" index="0"]
+material_override = SubResource("StandardMaterial3D_yx4wx")
+
+[node name="set_0_group_0_003" parent="set_0_group_0_002" index="1"]
+surface_material_override/0 = SubResource("StandardMaterial3D_yo7gt")
+
+[node name="set_0_group_0_001" parent="set_0_group_0_002/set_0_group_0_003" index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_h54to")
+
+[node name="set_1_group_0" parent="set_0_group_0_002" index="2"]
+material_override = SubResource("StandardMaterial3D_q6jmm")
+surface_material_override/0 = SubResource("StandardMaterial3D_n8fru")
+
+[node name="set_2_group_0" parent="set_0_group_0_002" index="3"]
+material_override = SubResource("StandardMaterial3D_tlguq")
+
+[node name="set_3_group_0" parent="set_0_group_0_002" index="4"]
+material_override = SubResource("StandardMaterial3D_aii0d")
