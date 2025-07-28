@@ -1,24 +1,29 @@
-[gd_scene load_steps=5 format=3 uid="uid://c1hiau7uuj152"]
+[gd_scene load_steps=6 format=3 uid="uid://c1hiau7uuj152"]
 
-[ext_resource type="PackedScene" uid="uid://cqelttabgx3mx" path="res://tanks/E75/e_75.tscn" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://cisqmsy3amkrf" path="res://player.gd" id="1_i3pqv"]
 [ext_resource type="Script" uid="uid://doiyvurqtksb1" path="res://camera_holder.gd" id="2_onrkg"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_onrkg"]
-size = Vector3(3.78699, 1.75732, 6.8074)
+[sub_resource type="BoxMesh" id="BoxMesh_onrkg"]
+size = Vector3(3, 1, 5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_onrkg"]
+albedo_color = Color(0.278431, 0.231373, 1, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_i3pqv"]
+size = Vector3(3, 1, 5)
 
 [node name="RigidBody3D" type="RigidBody3D"]
-mass = 91500.0
 script = ExtResource("1_i3pqv")
-
-[node name="E75" parent="." instance=ExtResource("1_4flbx")]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0111694, 0.932072, 0.0529022)
-shape = SubResource("BoxShape3D_onrkg")
 
 [node name="CameraHolder" type="Node3D" parent="."]
 script = ExtResource("2_onrkg")
 
 [node name="Camera3D" type="Camera3D" parent="CameraHolder"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.37671, 5.63563)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_onrkg")
+surface_material_override/0 = SubResource("StandardMaterial3D_onrkg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_i3pqv")

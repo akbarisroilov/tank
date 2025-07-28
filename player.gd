@@ -32,41 +32,17 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
 		# Apply impulse upward (Y-axis)
-		apply_impulse(Vector3.UP * 260000, Vector3.ZERO)
+		
+		apply_impulse(Vector3.UP * 3, Vector3(randf() * 2 - 1, randf() * 2 - 1, randf() * 2 - 1))
 		
 	# Handle tank movement
 	var forward_input = Input.get_axis("down", "up")  # W/S for forward/backward
 	var steer_input = Input.get_axis("right", "left")  # A/D for steering
 	
-	apply_force(-transform.basis.z.normalized() * forward_input * max_engine_force)
-	
-	apply_torque(Vector3.UP * steer_input * 2000)
-		
-	# Apply engine force for movement
-	#engine_force = forward_input * max_engine_force
-	#brake = Input.is_action_pressed("ui_select") * max_brake_force  # Space for braking
+	#apply_force(-transform.basis.z.normalized() * forward_input * max_engine_force)
+	#
+	#apply_torque(Vector3.UP * steer_input * 6000000)
 
-	# Smoothly interpolate steering
-	#current_steering = lerp(current_steering, steer_input * max_steering, steering_speed * delta)
-	#steering = current_steering
-
-	# Handle turret rotation (horizontal, yaw)
-	#if Input.is_action_pressed("turret_left"):
-		#turret.rotate_y(deg_to_rad(turret_rotation_speed) * delta)
-	#if Input.is_action_pressed("turret_right"):
-		#turret.rotate_y(-deg_to_rad(turret_rotation_speed) * delta)
-
-	# Handle barrel pitch (vertical)
-	#var pitch_input = Input.get_axis("barrel_down", "barrel_up")  # I/K or custom keys
-	#var pitch_change = pitch_input * barrel_pitch_speed * delta
-	#var new_pitch = clamp(barrel.rotation_degrees.x + pitch_change, barrel_pitch_min, barrel_pitch_max)
-	#barrel.rotation_degrees.x = new_pitch
-
-	# Handle shooting
-	#fire_timer -= delta
-	#if Input.is_action_just_pressed("fire") and fire_timer <= 0.0:
-		#_shoot()
-		#fire_timer = fire_cooldown
 
 func _shoot() -> void:
 	pass
