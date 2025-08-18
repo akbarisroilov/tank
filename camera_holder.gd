@@ -33,11 +33,11 @@ func _input(event: InputEvent) -> void:
 		pitch = clamp(pitch, pitch_min, pitch_max)
 
 	# Handle mouse scroll for zooming
-	if event is InputEventMouseButton:
-		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			target_distance = clamp(target_distance - zoom_speed, min_distance, max_distance)
-		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			target_distance = clamp(target_distance + zoom_speed, min_distance, max_distance)
+	#if event is InputEventMouseButton:
+		#if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			#target_distance = clamp(target_distance - zoom_speed, min_distance, max_distance)
+		#if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			#target_distance = clamp(target_distance + zoom_speed, min_distance, max_distance)
 
 func _physics_process(delta: float) -> void:
 	# Smoothly interpolate the CameraHolder's position to follow the vehicle

@@ -28,13 +28,24 @@ var ray_length = 1.0 # 1 unit downward
 var ray_color = Color.RED # Default to red
 
 var points: Array[Node3D]
-@onready var up_force = mass * 10 / 4
+var up_force = mass * 500
 
 func _ready() -> void:
 	points.append($Node3D)
 	points.append($Node3D2)
 	points.append($Node3D3)
 	points.append($Node3D4)
+	
+	
+func _input(event: InputEvent) -> void:
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			up_force += 1
+		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			up_force -= 1
+			
+	print(up_force)
+
 
 func _physics_process(delta: float) -> void:
 	if Input.is_action_just_pressed("jump"):
@@ -82,9 +93,8 @@ func _physics_process(delta: float) -> void:
 			DebugDraw3D.draw_sphere(result.position, 0.05, Color.BLUE, false) # position, radius, color, no_depth_test
 			# You can get the distance if needed
 			var distance = global_ray_start.distance_to(result.position)
-			print(distance)
 			DebugDraw3D.draw_text(point.global_position, "%.2f" % distance, 72)
-			apply_upward_force(point.position, 1-distance * up_force * 1.7, -1)
+			apply_upward_force(point.position, 1-distance * up_force, -1)
 			 #print("Ray hit at:", result.position, "Distance:", distance)
 		else:
 			# Ray didn't hit anything
